@@ -1,14 +1,23 @@
 import { Grid, Typography, IconButton } from '@mui/material';
-import { MoreVert } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
+import { DeleteOutline } from '@mui/icons-material';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../store/store';
+import { deleteArchivedTask } from '../../../features/just-todo-it/archivedTasksSlice';
+
+
 
 
 
 export const SideTaskCards = () => {
 
+    const archivedTasks = useSelector((state: RootState) => state.archivedTasks);
+    const dispatch = useDispatch();
 
-    const taskList = useSelector((state: RootState) => state.task)
+    const handleDeleteTask = ( taskId:string ) =>{
+        dispatch(deleteArchivedTask(taskId))
+    };
+
+
   return (
     <Grid item xs={12} md={3}
         sx={{display:{xs:'none', md:'block'}}}>
@@ -18,15 +27,15 @@ export const SideTaskCards = () => {
             marginTop="1rem">
             <Typography variant='h4' component='h2' textAlign="center"
             marginBottom={1}>
-                All the tasks
+                Archived Tasks
             </Typography>
         </Grid>
         <Grid container
             justifyContent="center"
             alignContent="center">
             {
-                taskList.map(todo => (
-                <Grid item xs={12} key={todo.id}>
+                archivedTasks.map(task => (
+                <Grid item xs={12} key={task.id}>
                     <Grid container
                         justifyContent="space-between"
                         sx={{bgcolor:'white', borderRadius:'10px',
@@ -35,9 +44,8 @@ export const SideTaskCards = () => {
                                 fontSize="1.1rem" 
                                 component="h2"
                                 fontWeight="bold"
-                                textTransform="capitalize"
                                 marginBottom="1rem">
-                                {todo.title}
+                                {task.title}
                             </Typography>
                             <Grid container
                                 justifyContent="space-between">
@@ -50,10 +58,10 @@ export const SideTaskCards = () => {
                                     height: '23px',
                                     borderRadius:'4px',
                                     p:0.3}}>
-                                    {todo.tag}
+                                    {task.tag}
                                 </Typography>
-                                <IconButton>
-                                    <MoreVert fontSize='small'/>
+                                <IconButton onClick={() => handleDeleteTask(task.id)}>
+                                    <DeleteOutline fontSize='small'/>
                                 </IconButton>
                             </Grid>
                     </Grid>

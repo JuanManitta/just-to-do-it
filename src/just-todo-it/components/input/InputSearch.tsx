@@ -1,19 +1,12 @@
 import { FilterList, Search } from '@mui/icons-material';
 import { TextField, Typography, Grid, Button, Select, MenuItem, InputAdornment, IconButton } from '@mui/material';
 import { useState } from 'react';
-import { addTask } from '../../../features/just-todo-it/taskSlice';
-
-
-
 
 
 export const InputSearch = () => {
 
     const [quickFilters, setQuickFilters] = useState('all')
 
-    
-
-   
 
   return (
     <>
@@ -24,10 +17,10 @@ export const InputSearch = () => {
             sx={{fontSize:'1.2rem', fontWeight:'700', mb:{xs: 3, md:0}}}>
                 ... No dejemos para mañana lo que podemos hacer hoy"
         </Typography>
-        <Button variant='contained'
+        {/* <Button variant='contained'
             sx={{bgcolor:'secondary.main'}}>
             <Typography fontSize={12} fontWeight='700'>New task</Typography>
-        </Button>
+        </Button> */}
 
         </Grid>
         <Grid container

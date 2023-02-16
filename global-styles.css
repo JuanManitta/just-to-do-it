@@ -8,3 +8,52 @@ body {
   main {
     padding: 2rem;
   }
+  :root {
+    --animate-faster: 50ms
+  }
+
+
+  .task {
+    position: relative;
+    transition: transform 0.4s ease;
+    }
+
+
+  .task__selected {
+    position: fixed;
+    top: 30%;
+    right: 37%;
+    z-index: 999;
+    max-width: 30vw;
+    transition: transform 0.4s ease;
+    transform: scale(1);
+  }
+  
+  .task__selected--animate {
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 850px){
+    .task__selected{
+      right: 30%;
+      z-index: 999;
+      max-width: 40vw;
+    }
+  }
+
+  @media (max-width: 580px){
+    .task__selected{
+      right: 20%;
+      top:20%;
+      z-index: 999;
+      max-width: 60vw;
+    }
+  }
+
+  .display__none {
+    display: none;
+  }
+  .display__block {
+    display: block;
+  }
+

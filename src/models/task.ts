@@ -10,7 +10,7 @@ export const createTask = (title: string, description: string, tag: string): Tas
         description: description,
         id: uuid(),
         date: new Date().toLocaleString(),
-        tag: tag
+        tag: tag,
     }
 
     return task

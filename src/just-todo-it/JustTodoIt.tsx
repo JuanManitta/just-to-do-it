@@ -22,7 +22,6 @@ export const JustTodoIt = () => {
                 <Grid container
                     marginTop={2}
                     justifyContent="space-around">
-
                     <AddTaskButtons/>
                     <TaskCards/>
 
