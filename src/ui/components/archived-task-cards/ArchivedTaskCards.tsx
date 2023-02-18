@@ -8,7 +8,7 @@ import { deleteArchivedTask } from '../../../features/just-todo-it/archivedTasks
 
 
 
-export const SideTaskCards = () => {
+export const ArchivedTaskCards = () => {
 
     const archivedTasks = useSelector((state: RootState) => state.archivedTasks);
     const dispatch = useDispatch();

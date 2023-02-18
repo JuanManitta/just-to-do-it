@@ -1,11 +1,42 @@
 import { FilterList, Search } from '@mui/icons-material';
-import { TextField, Typography, Grid, Button, Select, MenuItem, InputAdornment, IconButton } from '@mui/material';
-import { useState } from 'react';
+import { TextField, Typography, Grid, Select, MenuItem, InputAdornment, IconButton, SelectChangeEvent } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { filterAndSearchTasks } from '../../../features/just-todo-it/taskSlice';
 
-
-export const InputSearch = () => {
+const state = {
+    title:'',
+}
+export const FiltersSearch = () => {
 
     const [quickFilters, setQuickFilters] = useState('all')
+    const [searchState, setSearchState] = useState(state)
+    const { title } = searchState;
+
+    const dispatch = useDispatch();
+
+    const handleInputChange = ({target}: React.ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = target;
+        setSearchState({
+            ...searchState,
+            [name]:value
+        });
+    };
+
+
+    useEffect(() => {
+        dispatch(filterAndSearchTasks({
+            title,
+            filter: quickFilters,
+        }))
+
+    }, [searchState, quickFilters ]);
+
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setQuickFilters(event.target.value as string);
+    };
+
 
 
   return (
@@ -26,7 +57,7 @@ export const InputSearch = () => {
         <Grid container
         sx={{mt:4}}
         marginBottom={5}>
-            <Grid item  xs={2}>
+            <Grid item  xs={4} sm={2}>
                 <Select
                     labelId='demo-simple-select-label'
                     id='demo-simple-select'
@@ -34,6 +65,7 @@ export const InputSearch = () => {
                     label="Quick Filters"
                     fullWidth    
                     IconComponent={FilterList}
+                    onChange={handleChange}
                     sx={{bgcolor:'white',
                     borderTopLeftRadius:'8px',
                     borderBottomLeftRadius:'8px',
@@ -49,10 +81,13 @@ export const InputSearch = () => {
                     <MenuItem value={'others'}> Others</MenuItem>
                 </Select>
             </Grid>
-            <Grid item xs={10}>
+            <Grid item xs={8} sm={10}>
                 <TextField
+                value={title}
+                name='title'
+                onChange={handleInputChange}
                 fullWidth
-                placeholder="buscar"
+                placeholder="Search by title"
                 sx={{ backgroundColor:'white',
                 borderTopRightRadius:'8px',
                 borderBottomRightRadius:'8px',
@@ -64,7 +99,7 @@ export const InputSearch = () => {
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="end">
-                          <IconButton>
+                          <IconButton disabled>
                               <Search/>
                           </IconButton>
                       </InputAdornment>

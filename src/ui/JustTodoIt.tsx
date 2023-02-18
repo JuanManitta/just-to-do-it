@@ -1,7 +1,7 @@
-import { InputSearch } from './components/input/InputSearch';
+import { FiltersSearch } from './components/filters-search/FiltersSearch';
 import { AddTaskButtons } from './components/add-tasks-buttons/AddTaskButtons';
 import { TaskCards } from './components/task-cards/TaskCards';
-import { SideTaskCards } from './components/side-task-cards/SideTaskCards';
+import { ArchivedTaskCards } from './components/archived-task-cards/ArchivedTaskCards';
 import { Header } from './components/header/Header';
 
 import { Divider, Grid  } from '@mui/material';
@@ -18,10 +18,12 @@ export const JustTodoIt = () => {
         <Grid container
             sx={{minHeight:'100vh'}}>
             <Grid component="section" item xs={12} sm={12} md={8}>
-                <InputSearch/>
+                <FiltersSearch/>
                 <Grid container
                     marginTop={2}
                     justifyContent="space-around">
+
+                    {/* BUTTONS & TASKS */}
                     <AddTaskButtons/>
                     <TaskCards/>
 
@@ -35,9 +37,9 @@ export const JustTodoIt = () => {
                 flexItem
                 sx={{minHeight:'100vh'}}/>
             </Grid>
-            <SideTaskCards/>
+            <ArchivedTaskCards/>
         </Grid>
     </main>
   </>
-  )
-}
+  );
+};
