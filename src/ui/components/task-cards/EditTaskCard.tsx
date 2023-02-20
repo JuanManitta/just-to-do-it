@@ -68,11 +68,11 @@ const {
               borderRadius:'4px',
               p:0.3}}>
                 <Typography textAlign="center" bgcolor={task.tag === 'Life' 
-                    ? 'primary.main' 
+                    ? 'info.main' 
                     : task.tag === 'Work' 
-                    ? 'secondary.main' 
-                    : 'grey'}
-                    borderRadius='4px'>
+                    ? 'info.light' 
+                    : 'info.dark'}
+                    borderRadius='4px' sx={{fontSize:'14px', boxShadow:1}}>
                     {task.tag}
                   </Typography>
               </Grid>

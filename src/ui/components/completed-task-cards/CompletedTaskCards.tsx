@@ -34,8 +34,8 @@ export const CompletedTaskCards = () => {
             alignContent="center"
             marginTop="1rem">
             <Typography variant='h4' component='h2' textAlign="center"
-            marginBottom={1}>
-                Completed tasks
+            marginBottom={1} fontWeight='400'>
+                Completed Tasks
             </Typography>
         </Grid>
         <Grid container
@@ -45,7 +45,7 @@ export const CompletedTaskCards = () => {
                 completedTasks.map(task => (
                 <Grid item xs={12} key={task.id}>
                     <Grid container
-                        sx={{bgcolor:'secondary.main', borderRadius:'10px', border:'1px solid #fff',
+                        sx={{bgcolor:'secondary.main', borderRadius:'10px', border:'1px solid #F7EFE5',
                          p:1.5, mb:1, mt:2, boxShadow:'5px 5px 6px 1px rgba(0, 0, 0, 0.028)' }}>
                             <Typography 
                                 fontSize="1.1rem" 

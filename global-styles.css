@@ -8,10 +8,6 @@ body {
   main {
     padding: 2rem;
   }
-  :root {
-    --animate-faster: 50ms
-  }
-
 
   .task {
     position: relative;

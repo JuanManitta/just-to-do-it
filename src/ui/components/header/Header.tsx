@@ -48,7 +48,7 @@ export const Header = () => {
         </IconButton> */}
         {/* <img src={logo} alt="Logo" style={{ height: 40, marginRight: 10 }} /> */}
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight:'bold', textTransform:'uppercase' }}>
-          Just Todo It
+          Just Task It
         <IconButton>
           <img style={{marginLeft:'6px', width:'25px'}} src={logo} alt="" />
         </IconButton>

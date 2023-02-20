@@ -6,9 +6,10 @@ import { Task } from '../../../types/taskType';
 import { EditTaskCard } from './EditTaskCard';
 import { ViewTaskCard } from './ViewTaskCard';
 
-import { Grid  } from '@mui/material';
-import { completeTask, deleteTask, editTask } from '../../../features/just-todo-it/taskSlice';
-import { addCompletedTask } from '../../../features/just-todo-it/completedTasksSlice';
+import { Grid, Snackbar } from '@mui/material';
+import { addTask, completeTask, deleteTask, editTask } from '../../../features/just-todo-it/taskSlice';
+import { addCompletedTask, deleteCompletedTask, undoCompleteTask } from '../../../features/just-todo-it/completedTasksSlice';
+import { UndoButton } from '../undo-button/UndoButton';
 
 
 
@@ -17,8 +18,10 @@ export const TaskCards = () => {
 
   //STATES & REDUX
   const { initialTasks, activeFilter } = useSelector((state: RootState) => state.task);
- 
   
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackBarType, setSnackBarType] = useState<'completed' | 'deleted'> ('completed')
+  const [lastCompletedOrDeletedTask, setLastCompletedOrDeletedTask] = useState<Task | null>(null)
   const dispatch = useDispatch();
 
 
@@ -84,6 +87,9 @@ export const TaskCards = () => {
   const handleDeleteTask = (task:Task) => {
     const taskId = task.id
     dispatch(deleteTask(taskId))
+    setOpenSnackbar(true)
+    setSnackBarType('deleted')
+    setLastCompletedOrDeletedTask(task)
   };
 
 
@@ -91,15 +97,35 @@ export const TaskCards = () => {
     dispatch(completeTask(task.id))
     dispatch(addCompletedTask(task))
     dispatch(deleteTask(task.id))
+    setOpenSnackbar(true)
+    setSnackBarType('completed')
+    setLastCompletedOrDeletedTask(task)
+
   };
 
+  //SNACKBAR ACTIONS
+
+  const handleUndoCompleteTask = () => {
+    dispatch(addTask(lastCompletedOrDeletedTask))
+    dispatch(undoCompleteTask(lastCompletedOrDeletedTask))
+    setOpenSnackbar(false)
+  };
+
+  const handleUndoDeleteTask = () => {
+    dispatch(addTask(lastCompletedOrDeletedTask))
+    setOpenSnackbar(false)
+  };
+  
   //FILTER TASKS
 
   const filteredTasks = activeFilter === 'All'
     ? initialTasks 
     : initialTasks.filter((task) => task.tag === activeFilter);
 
-    
+  
+
+
+
   //PROPS TO CHILDRENS
   const editCardProps = {
   selectedTask,
@@ -114,7 +140,11 @@ export const TaskCards = () => {
     handleTaskEdit,
     handleDeleteTask,
     handleCompleteTask,
+    openSnackbar,
+    setOpenSnackbar
   };
+
+  
 
 
   return (
@@ -143,6 +173,16 @@ export const TaskCards = () => {
         
       }
     </Grid>
+    <Snackbar
+      open={openSnackbar}
+      autoHideDuration={2000}
+      onClose={() => setOpenSnackbar(false)}
+      message={snackBarType === 'completed' ? 'Marked as completed' : 'Task deleted'}
+      action={<UndoButton
+      handleUndoCompleteTask={handleUndoCompleteTask}
+      handleUndoDeleteTask={handleUndoDeleteTask}
+      snackbarType={snackBarType}
+        />}/>
     </> 
   );
 };

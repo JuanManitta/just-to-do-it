@@ -32,7 +32,8 @@ export const AddTaskInput: React.FC<AddTaskInputProps> = (props) => {
         className={`${addingNewTask === false || isOpen === false ? 'display__none' : '' }`}
         sx={{position:'fixed', top:'30%', rigth:'37%', maxWidth:'70vw', zIndex:99}}>
             <Grid 
-                container sx={{bgcolor: "secondary.main", transition:'0.3s', 
+                container sx={{bgcolor: "secondary.main", transition:'0.3s',
+                border: '1px solid #fff', 
                 borderRadius: "10px", p: 2,
                 boxShadow:'5px 5px 6px 1px rgba(0, 0, 0, 0.18)'}}
                 ref={taskRef}>
@@ -73,14 +74,14 @@ export const AddTaskInput: React.FC<AddTaskInputProps> = (props) => {
                             : tag === 'Work' 
                             ? 'info.light' 
                             : 'info.dark'}
-                            borderRadius='4px'>
+                            borderRadius='4px' sx={{color: 'text.default'}}>
                             {tag}
                         </Typography>
                       </Grid>
 
                         <IconButton onClick={handleFormSubmit}
                           sx={{'&:hover':{
-                            backgroundColor:'white',
+                            backgroundColor:'inherit',
                           }}}>
                             <Typography marginRight={1}>Add</Typography>
                             <LibraryAdd/>

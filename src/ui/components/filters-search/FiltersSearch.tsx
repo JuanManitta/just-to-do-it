@@ -3,7 +3,6 @@ import { TextField, Typography, Grid, Select, MenuItem, InputAdornment, IconButt
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { filterAndSearchTasks } from '../../../features/just-todo-it/taskSlice';
-// import { filterAndSearchTasks } from '../../../features/just-todo-it/taskSlice';
 
 const state = {
     title:'',
@@ -48,7 +47,7 @@ export const FiltersSearch = () => {
         sx={{mt:2}}>
         <Typography variant='h2'
             sx={{fontSize:'1.2rem', fontWeight:'700', mb:{xs: 3, md:0}}}>
-                ... No dejemos para mañana lo que podemos hacer hoy"
+                "Pequeños pasos,<b> grandes logros" </b>
         </Typography>
         </Grid>
         <Grid container
