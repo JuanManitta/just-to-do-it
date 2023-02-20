@@ -1,39 +1,44 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createTask } from '../../models/task';
 import { Task } from '../../types/taskType';
-import { v4 as uuid } from 'uuid';
 import { getTasksFromLocalStorage, saveTasksToLocalStorage } from '../../utilities/localStorage';
 
-const initialState: Task[] = getTasksFromLocalStorage() || [];
 
+
+
+const initialTasks: Task[] = getTasksFromLocalStorage() || [];
 
 
 export const taskSlice = createSlice({
     name: 'taskSlice',
-    initialState,
+    initialState:{
+        initialTasks: initialTasks,
+        activeFilter: 'All',
+    },
+
     reducers:{
 
         addTask:(state, action) =>{
             const {title, description, tag} = action.payload
-            const task = createTask(title, description, tag)
-            state.push(task)
-            saveTasksToLocalStorage(state);
+            const task: Task = createTask(title, description, tag )
+            state.initialTasks.push(task)
+            saveTasksToLocalStorage(state.initialTasks);
         },
 
         deleteTask:(state, action) =>{
             const id = action.payload
-            const newTaskList: Task[] = state.filter( task => task.id !== id)
-            state= newTaskList
-            saveTasksToLocalStorage(state);
+            const origianlTasks = getTasksFromLocalStorage();
+            const updatedTasksList = origianlTasks.filter( task => task.id !== id)
+            state.initialTasks = updatedTasksList;
+            saveTasksToLocalStorage(state.initialTasks);
 
-            return newTaskList
         },
 
         editTask:(state, action) =>{
 
             const {id, title, description, tag} = action.payload
             
-            const updatedTasksList = state.map( task => {
+            const updatedTasksList = state.initialTasks.map( task => {
                 if(task.id === id){
                     return {
                         ...task,
@@ -44,48 +49,43 @@ export const taskSlice = createSlice({
                 }
                 return task
             });
-            state = updatedTasksList;
-            saveTasksToLocalStorage(state);
+            state.initialTasks = updatedTasksList;
+            saveTasksToLocalStorage(state.initialTasks);
             return state;
         },
-
-        // searchTask:(state, action) =>{
-
-        //     const title = action.payload
-        //     const originalState = getTasksFromLocalStorage() || initialState;
-        //     const newTaskList = originalState.filter( task => 
-        //         task.title.toLocaleLowerCase().includes(title.toLocaleLowerCase())
-        //     );
-        //     return newTaskList;
-        // },
 
         filterAndSearchTasks:(state, action) =>{
 
             const { filter, title } = action.payload
-                    
-            if(filter === 'all'){
-               const originalState = getTasksFromLocalStorage() || initialState;
-               const searchedTasks = originalState.filter( task =>
-                task.title.toLocaleLowerCase().includes(title.toLocaleLowerCase())
-             );
-             return searchedTasks;
+            state.activeFilter = filter;
+            const origianlTasks = getTasksFromLocalStorage();
+            const filteredTasks = origianlTasks.filter( task => {
+                if(filter === 'All'){
+                    return task.title.toLowerCase().includes(title.toLowerCase())
+                }
+                return task.tag === filter && task.title.toLowerCase().includes(title.toLowerCase())
+            })
+            state.initialTasks = filteredTasks;   
+        },
 
-            } else {
-
-            const originalState = getTasksFromLocalStorage() || initialState;
-            const filteredTasks = originalState.filter( task => 
-                task.tag.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
-            );
-            const searchedTasks = filteredTasks.filter( task =>
-                task.title.toLocaleLowerCase().includes(title.toLocaleLowerCase())
-            );
-                return searchedTasks;
-            }           
+        completeTask:(state, action) =>{
+            const id = action.payload
+            const updatedTasksList = state.initialTasks.map( task => {
+                if(task.id === id){
+                    return {
+                        ...task,
+                        done: !task.done
+                    }
+                }
+                return task
+            });
+            state.initialTasks = updatedTasksList;
+            saveTasksToLocalStorage(state.initialTasks);
+            return state;
         }
     }
 });
 
 
-export const {addTask, deleteTask, editTask, filterAndSearchTasks} = taskSlice.actions
+export const {addTask, deleteTask, editTask, filterAndSearchTasks, completeTask} = taskSlice.actions
 
-export default taskSlice.reducer

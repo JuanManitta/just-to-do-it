@@ -31,13 +31,14 @@ const {
   return (
     <Grid className={`task ${selectedTask && selectedTask.id === task.id ? 'task__selected task__selected--animate' : ''}`}
 
-        container sx={{bgcolor: "white", transition:'0.3s', 
+        container sx={{bgcolor: "secondary.main", transition:'0.3s', 
         borderRadius: "10px", p: 2,
-        boxShadow:'5px 5px 6px 1px rgba(0, 0, 0, 0.028)',}}
+        boxShadow:'5px 5px 6px 1px rgba(0, 0, 0, 0.142)',}}
         ref={taskRef}
         >
           <form onSubmit={handleSubmit}>
             <TextField 
+            placeholder='Title'
             value={title}
             name='title'
             onChange={onChange}
@@ -49,6 +50,7 @@ const {
               border:'none'
             }}}/>
             <TextField 
+            placeholder='¿Cuál es tu tarea?'
             value={description}
             name='description'
             onChange={onChange}

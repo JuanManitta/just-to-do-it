@@ -88,7 +88,7 @@ export const AddTaskButtons = () => {
   return (
     <>
     <Grid sx={{display: addingNewTask === false || isOpen === false ? 'none':'block',position:'fixed', top:0, left:0, bottom:0, height:'100%', width:'100%',
-      backgroundColor:'secondary.main', opacity:'0.8', zIndex:2 }}>
+      backgroundColor:'primary.main', opacity:'0.8', zIndex:2 }}>
       </Grid>
       
     <Grid item xs={3}>

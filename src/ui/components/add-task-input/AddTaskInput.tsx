@@ -32,7 +32,7 @@ export const AddTaskInput: React.FC<AddTaskInputProps> = (props) => {
         className={`${addingNewTask === false || isOpen === false ? 'display__none' : '' }`}
         sx={{position:'fixed', top:'30%', rigth:'37%', maxWidth:'70vw', zIndex:99}}>
             <Grid 
-                container sx={{bgcolor: "white", transition:'0.3s', 
+                container sx={{bgcolor: "secondary.main", transition:'0.3s', 
                 borderRadius: "10px", p: 2,
                 boxShadow:'5px 5px 6px 1px rgba(0, 0, 0, 0.18)'}}
                 ref={taskRef}>
@@ -69,10 +69,10 @@ export const AddTaskInput: React.FC<AddTaskInputProps> = (props) => {
                       borderRadius:'4px',
                       p:0.3}}>
                         <Typography textAlign="center" bgcolor={tag === 'Life' 
-                            ? 'primary.main' 
+                            ? 'info.main' 
                             : tag === 'Work' 
-                            ? 'secondary.main' 
-                            : 'grey'}
+                            ? 'info.light' 
+                            : 'info.dark'}
                             borderRadius='4px'>
                             {tag}
                         </Typography>

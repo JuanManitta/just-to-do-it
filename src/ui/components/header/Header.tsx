@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import logo from '../../../assets/logo.svg';
 import React from 'react';
+import { DarkModeButton } from '../dark-mode-button/DarkModeButton';
 
 interface ElevationScrollProps {
   children: React.ReactElement;
@@ -18,12 +19,18 @@ const ElevationScroll: React.FC<ElevationScrollProps> = (props) => {
   return React.cloneElement(children, {
     elevation: trigger ? 4 : 0,
     sx: {
-      backgroundColor: trigger ? 'white' : 'secondary.main'
+      backgroundColor: trigger ? 'secondary.main' : 'primary.main'
     },
   });
 }
 
+
 export const Header = () => {
+
+  
+
+
+
   return (
     <ElevationScroll>
     <AppBar position="sticky"
@@ -46,6 +53,7 @@ export const Header = () => {
           <img style={{marginLeft:'6px', width:'25px'}} src={logo} alt="" />
         </IconButton>
         </Typography>
+        <DarkModeButton/>
       </Toolbar>
     </AppBar>
     </ElevationScroll>

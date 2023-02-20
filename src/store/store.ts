@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import tasksReducer from '../features/just-todo-it/taskSlice'
-import archivedTaslSlice from '../features/just-todo-it/archivedTasksSlice';
+import { taskSlice } from '../features/just-todo-it/taskSlice';
+import { completedTasksSlice } from '../features/just-todo-it/completedTasksSlice';
+import { colorModeSlice } from '../features/dark-mode/colorModeSlice';
 
 
 export const store = configureStore({
     reducer:{
-        task: tasksReducer,
-        archivedTasks: archivedTaslSlice
+        task: taskSlice.reducer,
+        completedTasks: completedTasksSlice.reducer,
+        colorMode: colorModeSlice.reducer
     },
 })
 

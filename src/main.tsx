@@ -8,11 +8,11 @@ import { JustTodoIt } from './ui/JustTodoIt';
 import '../global-styles.css'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <AppTheme>
+  // <React.StrictMode>
       <Provider store={ store }>
+        <AppTheme>
         <JustTodoIt />
+        </AppTheme>
       </Provider>
-    </AppTheme>
-  </React.StrictMode>
+  // </React.StrictMode>
 )

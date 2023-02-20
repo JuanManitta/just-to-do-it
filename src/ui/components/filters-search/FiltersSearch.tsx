@@ -1,17 +1,20 @@
 import { FilterList, Search } from '@mui/icons-material';
 import { TextField, Typography, Grid, Select, MenuItem, InputAdornment, IconButton, SelectChangeEvent } from '@mui/material';
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { filterAndSearchTasks } from '../../../features/just-todo-it/taskSlice';
+// import { filterAndSearchTasks } from '../../../features/just-todo-it/taskSlice';
 
 const state = {
     title:'',
 }
 export const FiltersSearch = () => {
 
-    const [quickFilters, setQuickFilters] = useState('all')
+    const [quickFilters, setQuickFilters] = useState('All')
     const [searchState, setSearchState] = useState(state)
     const { title } = searchState;
+
+    const colorMode = useSelector((state: any) => state.colorMode.value);
 
     const dispatch = useDispatch();
 
@@ -22,7 +25,6 @@ export const FiltersSearch = () => {
             [name]:value
         });
     };
-
 
     useEffect(() => {
         dispatch(filterAndSearchTasks({
@@ -48,11 +50,6 @@ export const FiltersSearch = () => {
             sx={{fontSize:'1.2rem', fontWeight:'700', mb:{xs: 3, md:0}}}>
                 ... No dejemos para mañana lo que podemos hacer hoy"
         </Typography>
-        {/* <Button variant='contained'
-            sx={{bgcolor:'secondary.main'}}>
-            <Typography fontSize={12} fontWeight='700'>New task</Typography>
-        </Button> */}
-
         </Grid>
         <Grid container
         sx={{mt:4}}
@@ -66,19 +63,19 @@ export const FiltersSearch = () => {
                     fullWidth    
                     IconComponent={FilterList}
                     onChange={handleChange}
-                    sx={{bgcolor:'white',
+                    sx={{bgcolor:'secondary.main',
                     borderTopLeftRadius:'8px',
                     borderBottomLeftRadius:'8px',
                     borderBottomRightRadius:'0px',
                     borderTopRightRadius:'0px',
                     '& .MuiOutlinedInput-notchedOutline':{
-                        border:'none',
+                        border:'1px solid #F7EFE5',
                         boxShadow:'5px 5px 6px 1px rgba(0, 0, 0, 0.028)' 
                     }}}>
-                    <MenuItem value={'all'}>All</MenuItem>
-                    <MenuItem value={'work'}> Work</MenuItem>
-                    <MenuItem value={'life'}> Life</MenuItem>
-                    <MenuItem value={'others'}> Others</MenuItem>
+                    <MenuItem value={'All'}>All</MenuItem>
+                    <MenuItem value={'Work'}> Work</MenuItem>
+                    <MenuItem value={'Life'}> Life</MenuItem>
+                    <MenuItem value={'Others'}> Others</MenuItem>
                 </Select>
             </Grid>
             <Grid item xs={8} sm={10}>
@@ -88,12 +85,12 @@ export const FiltersSearch = () => {
                 onChange={handleInputChange}
                 fullWidth
                 placeholder="Search by title"
-                sx={{ backgroundColor:'white',
+                sx={{ backgroundColor:'secondary.main',
                 borderTopRightRadius:'8px',
                 borderBottomRightRadius:'8px',
                 borderTopLeftRadius:'0px',
                 '& .MuiOutlinedInput-notchedOutline': {
-                    border:'none',
+                    border:'1px solid #F7EFE5',
                     boxShadow:'5px 5px 6px 1px rgba(0, 0, 0, 0.028)' 
                 },}}
                 InputProps={{

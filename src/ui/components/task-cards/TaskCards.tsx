@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../store/store';
-import { deleteTask, editTask } from '../../../features/just-todo-it/taskSlice';
-import { addArchivedTask } from '../../../features/just-todo-it/archivedTasksSlice';
 
 import { Task } from '../../../types/taskType';
 import { EditTaskCard } from './EditTaskCard';
 import { ViewTaskCard } from './ViewTaskCard';
 
 import { Grid  } from '@mui/material';
+import { completeTask, deleteTask, editTask } from '../../../features/just-todo-it/taskSlice';
+import { addCompletedTask } from '../../../features/just-todo-it/completedTasksSlice';
 
 
 
@@ -16,8 +16,11 @@ import { Grid  } from '@mui/material';
 export const TaskCards = () => {
 
   //STATES & REDUX
-  const tasksList: Task[] = useSelector((state: RootState) => state.task);
+  const { initialTasks, activeFilter } = useSelector((state: RootState) => state.task);
+ 
+  
   const dispatch = useDispatch();
+
 
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [formState, setFormState] = useState({
@@ -25,6 +28,7 @@ export const TaskCards = () => {
     description: '',
     tag: selectedTask?.tag
   });
+  
 
   
   //EVENTS
@@ -77,18 +81,25 @@ export const TaskCards = () => {
     })
   };
   
-  
   const handleDeleteTask = (task:Task) => {
     const taskId = task.id
     dispatch(deleteTask(taskId))
   };
 
- 
-  const handleArchiveTask = (task:Task) => {
-      dispatch(addArchivedTask(task));
-      handleDeleteTask(task);
+
+  const handleCompleteTask = (task: Task) => {
+    dispatch(completeTask(task.id))
+    dispatch(addCompletedTask(task))
+    dispatch(deleteTask(task.id))
   };
 
+  //FILTER TASKS
+
+  const filteredTasks = activeFilter === 'All'
+    ? initialTasks 
+    : initialTasks.filter((task) => task.tag === activeFilter);
+
+    
   //PROPS TO CHILDRENS
   const editCardProps = {
   selectedTask,
@@ -102,7 +113,7 @@ export const TaskCards = () => {
   const viewTaskProps = {
     handleTaskEdit,
     handleDeleteTask,
-    handleArchiveTask,
+    handleCompleteTask,
   };
 
 
@@ -112,16 +123,16 @@ export const TaskCards = () => {
       display: !selectedTask 
       ? 'none'
       :'block',position:'fixed', top:0, left:0, bottom:0, height:'100%', width:'100%',
-        backgroundColor:'secondary.main', opacity:'0.8', zIndex:2 
+        backgroundColor:'primary.main', opacity:'0.8', zIndex:2 
       }}>
     </Grid>
 
     <Grid container spacing={3}
         paddingTop='1.5rem'>
       {
-        tasksList.map((task) => (
+        filteredTasks.map((task) => (
+          
           <Grid item xs={12} sm={6} lg={4} key={task.id}>
-
             {
             selectedTask && selectedTask.id === task.id 
             ? ( <EditTaskCard{...editCardProps} task={task}/> ) 
@@ -129,6 +140,7 @@ export const TaskCards = () => {
             }
           </Grid>
         ))
+        
       }
     </Grid>
     </> 
