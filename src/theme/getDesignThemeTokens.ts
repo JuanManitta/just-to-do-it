@@ -14,9 +14,9 @@ export const getDesignTokens = (mode: any) => ({
                 default: '#202124'
             },
             info:{
-                main: '#EFDFCB',
+                main: '#F7EFE5',
                 light: '#E7CFB1',
-                dark: '#DBB78A'
+                dark: '#D3A770'
             },
             text:{
                 primary: '#f6f6f7',
@@ -35,13 +35,36 @@ export const getDesignTokens = (mode: any) => ({
                 default: '#F7EFE5'
             },
             info:{
-                main: '#EFDFCB',
+                main: '#F7EFE5',
                 light: '#E7CFB1',
-                dark: '#DBB78A'
+                dark: '#D3A770'
             },
           }),
     },
+    
     typography: {
         fontFamily:"'Space Grotesk', sans-serif",
+    },
+    components: {
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    '& .MuiOutlinedInput-root': {
+                        '& fieldset': {
+                            borderColor: 'none',
+                        },
+                        '&:hover fieldset': {
+                            borderColor: mode === 'dark' ? '#F7EFE5' : '#F7EFE5',
+                        },
+                        '&.Mui-focused fieldset': {
+                            borderColor: mode === 'dark' ? '#F7EFE5' : 'none',
+                        },
+                        
+                    },
+                },
+            },
+        },
+        
+        
     },
   });

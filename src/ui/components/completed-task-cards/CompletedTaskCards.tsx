@@ -6,13 +6,14 @@ import { deleteCompletedTask } from '../../../features/just-todo-it/completedTas
 import { addTask } from '../../../features/just-todo-it/taskSlice';
 import { Task } from '../../../types/taskType';
 import { MyPopover } from '../popover/MyPopover';
-
+import { useState } from 'react';
 
 
 
 
 export const CompletedTaskCards = () => {
 
+    const [hover, setHover] = useState(false)
     const completedTasks = useSelector((state: RootState) => state.completedTasks);
     const dispatch = useDispatch();
 
@@ -45,6 +46,8 @@ export const CompletedTaskCards = () => {
                 completedTasks.map(task => (
                 <Grid item xs={12} key={task.id}>
                     <Grid container
+                        onMouseEnter={() => setHover(true)}
+                        onMouseLeave={() => setHover(false)}
                         sx={{bgcolor:'secondary.main', borderRadius:'10px', border:'1px solid #F7EFE5',
                          p:1.5, mb:1, mt:2, boxShadow:'5px 5px 6px 1px rgba(0, 0, 0, 0.028)' }}>
                             <Typography 
@@ -76,17 +79,21 @@ export const CompletedTaskCards = () => {
                                 display='flex'>
 
                                 <MyPopover content='Delete'>
-                                <IconButton onClick={() => handleDeleteTask(task)}>
+                                <IconButton onClick={() => handleDeleteTask(task)}
+                                sx={{ opacity: hover ? '1' : '0',
+                                transition: 'opacity 0.3s'}}>
                                     <DeleteOutline fontSize='small'/>
                                 </IconButton>
                                 </MyPopover>
 
                                 <MyPopover content='Incomplete'>
                                 <Checkbox
-                                    color='info'
+                                    color='default'
                                     size='small'
                                     checked={task.done}
                                     onChange={() => handleIncompleteTask(task)}
+                                    sx={{ opacity: hover ? '1' : '0',
+                                    transition: 'opacity 0.3s'}}
                                     />
                                 </MyPopover>
                                 </Grid>

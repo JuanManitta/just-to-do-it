@@ -8,7 +8,7 @@ import { ViewTaskCard } from './ViewTaskCard';
 
 import { Grid, Snackbar } from '@mui/material';
 import { addTask, completeTask, deleteTask, editTask } from '../../../features/just-todo-it/taskSlice';
-import { addCompletedTask, deleteCompletedTask, undoCompleteTask } from '../../../features/just-todo-it/completedTasksSlice';
+import { addCompletedTask, undoCompleteTask } from '../../../features/just-todo-it/completedTasksSlice';
 import { UndoButton } from '../undo-button/UndoButton';
 
 
@@ -26,6 +26,7 @@ export const TaskCards = () => {
 
 
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
+  
   const [formState, setFormState] = useState({
     title:'',
     description: '',
