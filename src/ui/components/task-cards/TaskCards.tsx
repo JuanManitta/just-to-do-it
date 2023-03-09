@@ -1,43 +1,42 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../../store/store';
 
 import { Task } from '../../../types/taskType';
 import { EditTaskCard } from './EditTaskCard';
 import { ViewTaskCard } from './ViewTaskCard';
 
-import { Grid, Snackbar } from '@mui/material';
-import { addTask, completeTask, deleteTask, editTask } from '../../../features/just-todo-it/taskSlice';
-import { addCompletedTask, undoCompleteTask } from '../../../features/just-todo-it/completedTasksSlice';
-import { UndoButton } from '../undo-button/UndoButton';
-
-
-
+import { Grid, Skeleton } from '@mui/material';
+import { useTasksStore } from '../../../hooks/useTasksStore';
 
 export const TaskCards = () => {
 
   //STATES & REDUX
-  const { initialTasks, activeFilter } = useSelector((state: RootState) => state.task);
+  const { tasks, activeFilter, searcherWord } = useTasksStore()
+  const { startLoadingTasks, startEditingTask, startDeletingTask, isLoadingTasks } = useTasksStore();
+
+
+  //HTTP REQUEST
+  useEffect(() => {
+    startLoadingTasks()
+  }, [])
   
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackBarType, setSnackBarType] = useState<'completed' | 'deleted'> ('completed')
-  const [lastCompletedOrDeletedTask, setLastCompletedOrDeletedTask] = useState<Task | null>(null)
-  const dispatch = useDispatch();
-
-
+  // MANIPULATE SELECTED TASK
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   
+
+  // TO EDIT TASK
   const [formState, setFormState] = useState({
     title:'',
     description: '',
-    tag: selectedTask?.tag
+    tag: selectedTask?.tag,
+    id: '',
+    done: false,
   });
   
 
   
   //EVENTS
 
-  const taskRef = useRef<HTMLDivElement>(null);
+  const taskRef = useRef<HTMLDivElement>(null); // TO CLOSE MODAL
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
 
@@ -66,7 +65,7 @@ export const TaskCards = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     
-    dispatch(editTask({...formState, id:selectedTask?.id}))
+    startEditingTask(formState)
     setSelectedTask(null)   
      
   };
@@ -76,57 +75,43 @@ export const TaskCards = () => {
 
   const handleTaskEdit =  (task:Task) => {
     setSelectedTask(task)
-
+    
     setFormState({
       ...formState,
       title:task.title,
       description:task.description,
-      tag:task.tag
+      tag:task.tag,
+      id:task.id,
+      done: task.done
     })
   };
   
   const handleDeleteTask = (task:Task) => {
-    const taskId = task.id
-    dispatch(deleteTask(taskId))
-    setOpenSnackbar(true)
-    setSnackBarType('deleted')
-    setLastCompletedOrDeletedTask(task)
+    startDeletingTask(task)
   };
 
 
   const handleCompleteTask = (task: Task) => {
-    dispatch(completeTask(task.id))
-    dispatch(addCompletedTask(task))
-    dispatch(deleteTask(task.id))
-    setOpenSnackbar(true)
-    setSnackBarType('completed')
-    setLastCompletedOrDeletedTask(task)
-
+    const editedTask = {
+      ...task,
+      done: task.done ? false : true
+    }
+    startEditingTask(editedTask)
   };
 
-  //SNACKBAR ACTIONS
-
-  const handleUndoCompleteTask = () => {
-    dispatch(addTask(lastCompletedOrDeletedTask))
-    dispatch(undoCompleteTask(lastCompletedOrDeletedTask))
-    setOpenSnackbar(false)
-  };
-
-  const handleUndoDeleteTask = () => {
-    dispatch(addTask(lastCompletedOrDeletedTask))
-    setOpenSnackbar(false)
-  };
+  //TODO: UNDO COMPLETED TASK
   
   //FILTER TASKS
 
-  const filteredTasks = activeFilter === 'All'
-    ? initialTasks 
-    : initialTasks.filter((task) => task.tag === activeFilter);
+  const filteredTasks = activeFilter === 'All' // FILTER BY ACTIVE TAG
+  ? tasks.filter(task => task.title.toLowerCase().includes(searcherWord.toLowerCase())) // IF TAG IS ALL, FILTER BY SEARCHER WORD
+  : tasks.filter((task) => task.tag === activeFilter) // IF TAG IS NOT ALL
+    .filter(task => task.title.toLowerCase().includes(searcherWord.toLowerCase())); // FILTER BY CHARACTER WORD
 
+
+  //SKELETON LOADERS
+  const skeletonLoaders = new Array(3).fill(1);
   
-
-
-
   //PROPS TO CHILDRENS
   const editCardProps = {
   selectedTask,
@@ -136,17 +121,13 @@ export const TaskCards = () => {
   title,
   description,
   };
-
   const viewTaskProps = {
     handleTaskEdit,
     handleDeleteTask,
     handleCompleteTask,
-    openSnackbar,
-    setOpenSnackbar
   };
 
   
-
 
   return (
     <>
@@ -160,30 +141,27 @@ export const TaskCards = () => {
 
     <Grid container spacing={3}
         paddingTop='1.5rem'>
-      {
-        filteredTasks.map((task) => (
-          
+          <>
+          {isLoadingTasks 
+          ?
+          skeletonLoaders.map((skeletonLoader, index) => (
+          <Grid key={index} item xs={12} sm={6} lg={4} sx={{display:'flex'}}>
+            <Skeleton variant="rounded" width='100%' height={180} animation='wave' />
+          </Grid>
+          ))
+          :
+          filteredTasks.filter(task => task.done === false).map((task) => (
           <Grid item xs={12} sm={6} lg={4} key={task.id}>
             {
-            selectedTask && selectedTask.id === task.id 
-            ? ( <EditTaskCard{...editCardProps} task={task}/> ) 
-            : <ViewTaskCard{...viewTaskProps} task={task}/>
-            }
+              selectedTask && selectedTask.id === task.id 
+              ? ( <EditTaskCard{...editCardProps} task={task}/> ) 
+              : <ViewTaskCard{...viewTaskProps} task={task}/>
+            } 
           </Grid>
         ))
-        
       }
+      </>
     </Grid>
-    <Snackbar
-      open={openSnackbar}
-      autoHideDuration={2000}
-      onClose={() => setOpenSnackbar(false)}
-      message={snackBarType === 'completed' ? 'Marked as completed' : 'Task deleted'}
-      action={<UndoButton
-      handleUndoCompleteTask={handleUndoCompleteTask}
-      handleUndoDeleteTask={handleUndoDeleteTask}
-      snackbarType={snackBarType}
-        />}/>
     </> 
   );
 };

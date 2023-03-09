@@ -1,8 +1,9 @@
-import { Grid, Typography, IconButton, Checkbox, Snackbar } from '@mui/material';
+import { Grid, Typography, IconButton, Checkbox } from '@mui/material';
 import { MyPopover } from '../popover/MyPopover';
 import { Edit, DeleteOutline } from '@mui/icons-material';
 import { Task } from '../../../types/taskType';
 import { useState } from 'react';
+
 
 
 interface ViewTaskCardProps {
@@ -10,20 +11,22 @@ interface ViewTaskCardProps {
     handleTaskEdit: (task: Task) => void;
     handleDeleteTask: (task: Task) => void;
     handleCompleteTask: (task: Task) => void;
-}
-export const ViewTaskCard: React.FC<ViewTaskCardProps> = (props) => {
+};
 
+
+export const ViewTaskCard: React.FC<ViewTaskCardProps> = (props) => {
 const{
     task,
     handleTaskEdit,
     handleDeleteTask,
     handleCompleteTask,
-    
 } = props;
+
 
 const [hover, setHover] = useState(false);
 
   return (
+   
     <Grid
       container 
       flexDirection="column"
@@ -77,7 +80,6 @@ const [hover, setHover] = useState(false);
                 sx={{ opacity: hover ? '1' : '0',
                   transition: 'opacity 0.3s'}}/>
             </MyPopover>
-
             <Grid
                 sx={{
                 width:'70px',
@@ -94,5 +96,6 @@ const [hover, setHover] = useState(false);
             </Grid>
           </Grid>
     </Grid>
+
   )
 }

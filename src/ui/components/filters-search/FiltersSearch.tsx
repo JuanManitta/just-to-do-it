@@ -13,7 +13,6 @@ export const FiltersSearch = () => {
     const [searchState, setSearchState] = useState(state)
     const { title } = searchState;
 
-    const colorMode = useSelector((state: any) => state.colorMode.value);
 
     const dispatch = useDispatch();
 

@@ -9,7 +9,6 @@ interface UndoButtonProps {
 
 export const UndoButton: React.FC<UndoButtonProps> = ({handleUndoCompleteTask, handleUndoDeleteTask, snackbarType}) => {
 
-    console.log('snackbarType', snackbarType);
     
   return (
     <Button

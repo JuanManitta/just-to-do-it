@@ -1,5 +1,4 @@
 import { Task } from '../../../types/taskType';
-import { MyPopover } from '../popover/MyPopover';
 
 import { Grid, TextField, Typography, IconButton } from '@mui/material';
 import { Save } from '@mui/icons-material';

@@ -17,10 +17,10 @@ export const DarkModeButton = () => {
     const MaterialUISwitch = styled(Switch)(() => ({
         width: 60,
         height: 34,
-        padding: 7,
+        padding: 10,
         '& .MuiSwitch-switchBase': {
           margin: 1,
-          padding: 0,
+          padding: 3,
           transform: 'translateX(6px)',
           '&.Mui-checked': {
             color: '#fff',
@@ -38,8 +38,8 @@ export const DarkModeButton = () => {
         },
         '& .MuiSwitch-thumb': {
           backgroundColor: colorMode === 'light' ? '#14438f' : '#001e3c',
-          width: 32,
-          height: 32,
+          width: 25,
+          height: 25,
           '&:before': {
             content: "''",
             position: 'absolute',
@@ -65,9 +65,9 @@ export const DarkModeButton = () => {
 
   return (
    <FormControlLabel
-       control={<MaterialUISwitch 
-       onChange={handleColorChange}
-       checked={colorMode === 'light' ? true : false} />}
-       label={`${colorMode === 'light' ? 'Light' : 'Dark'}`}/>
+      control={<MaterialUISwitch 
+      onChange={handleColorChange}
+      checked={colorMode === 'light' ? true : false} />}
+      label={`${colorMode === 'light' ? 'Light' : 'Dark'}`}/>
   )
 }

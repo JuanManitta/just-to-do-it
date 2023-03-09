@@ -6,71 +6,67 @@ import { getTasksFromLocalStorage, saveTasksToLocalStorage } from '../../utiliti
 
 
 
-const initialTasks: Task[] = getTasksFromLocalStorage() || [];
-
+const tasks:Task[] = []
 
 export const taskSlice = createSlice({
     name: 'taskSlice',
     initialState:{
-        initialTasks: initialTasks,
+        tasks,
         activeFilter: 'All',
+        isLoadingTasks: true,
+        searcherWord: ''
     },
 
     reducers:{
 
+        loadingTasks:(state, action) =>{
+
+            const tasksArray:Task[] = action.payload
+            tasksArray.forEach( task => {
+                const exists = state.tasks.some( dbTask => dbTask.id === task.id );
+                if( !exists ){
+                    state.tasks.push( task )
+                }
+            });
+        },
+
+        handleSkeletonLoading:(state) =>{
+            state.isLoadingTasks = false;
+        },
+
+
         addTask:(state, action) =>{
-            const {title, description, tag} = action.payload
-            const task: Task = createTask(title, description, tag )
-            state.initialTasks.push(task)
-            saveTasksToLocalStorage(state.initialTasks);
+            const task = action.payload;
+            state.tasks.push(task)
         },
 
-        deleteTask:(state, action) =>{
-            const id = action.payload
-            const origianlTasks = getTasksFromLocalStorage();
-            const updatedTasksList = origianlTasks.filter( task => task.id !== id)
-            state.initialTasks = updatedTasksList;
-            saveTasksToLocalStorage(state.initialTasks);
-
+        deleteTask:(state, {payload}) =>{
+            state.tasks = state.tasks.filter( task => task.id !== payload.id)
         },
 
-        editTask:(state, action) =>{
+        editTask:(state, {payload}) =>{
 
-            const {id, title, description, tag} = action.payload
-            
-            const updatedTasksList = state.initialTasks.map( task => {
-                if(task.id === id){
-                    return {
-                        ...task,
-                        title,
-                        description,
-                        tag
-                    }
+            state.tasks = state.tasks.map( task => {
+                if (task.id === payload.id){
+                    return payload;
                 }
                 return task
             });
-            state.initialTasks = updatedTasksList;
-            saveTasksToLocalStorage(state.initialTasks);
-            return state;
         },
 
         filterAndSearchTasks:(state, action) =>{
 
             const { filter, title } = action.payload
+
             state.activeFilter = filter;
-            const origianlTasks = getTasksFromLocalStorage();
-            const filteredTasks = origianlTasks.filter( task => {
-                if(filter === 'All'){
-                    return task.title.toLowerCase().includes(title.toLowerCase())
-                }
-                return task.tag === filter && task.title.toLowerCase().includes(title.toLowerCase())
-            })
-            state.initialTasks = filteredTasks;   
+            state.searcherWord = title;
+
+             
         },
 
         completeTask:(state, action) =>{
             const id = action.payload
-            const updatedTasksList = state.initialTasks.map( task => {
+            const updatedTasksList = state.tasks.map( task => {
                 if(task.id === id){
                     return {
                         ...task,
@@ -79,13 +75,21 @@ export const taskSlice = createSlice({
                 }
                 return task
             });
-            state.initialTasks = updatedTasksList;
-            saveTasksToLocalStorage(state.initialTasks);
+            state.tasks = updatedTasksList;
+            saveTasksToLocalStorage(state.tasks);
             return state;
         }
     }
 });
 
 
-export const {addTask, deleteTask, editTask, filterAndSearchTasks, completeTask} = taskSlice.actions
+export const {
+    addTask, 
+    deleteTask, 
+    editTask, 
+    filterAndSearchTasks, 
+    completeTask, 
+    loadingTasks,
+    handleSkeletonLoading
+    } = taskSlice.actions
 

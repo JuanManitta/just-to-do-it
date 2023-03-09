@@ -5,14 +5,19 @@ import { AddTaskInput } from '../add-task-input/AddTaskInput';
 
 import { MoreVert, AddCircle } from '@mui/icons-material';
 import { Grid, Typography, IconButton,  } from '@mui/material';
+import { useTasksStore } from '../../../hooks/useTasksStore';
 
 const taskSample ={
     title: '',
     description:'',
-    tag:''
+    tag:'',
+    done: false,
+    id: '',
 }
 
 export const AddTaskButtons = () => {
+
+    const { startCreatingTask } = useTasksStore();
 
     //STATES & REDUX
     const [addingNewTask, setAddingNewTask] = useState(false);
@@ -43,13 +48,14 @@ export const AddTaskButtons = () => {
       
     }, []);
 
-    //ABRIR FORMULARIO
+    //ABRIR FORMULARIO Y AGREGAR TASK
     const handleAddTask = (tag:string) =>{
       setAddingNewTask(false);
       setIsOpen(true)
       setFormState({
           ...formState,
-          tag:tag
+          tag:tag,
+          done:false
       });
   };
 
@@ -68,8 +74,11 @@ export const AddTaskButtons = () => {
       event.preventDefault();
       if(formState.description.length < 1 || formState.title.length < 1) return;
       setIsOpen(false);
-      dispatch(addTask(formState));
+      // dispatch(addTask(formState));
       setFormState(taskSample);
+
+      startCreatingTask(formState);
+      
     };
 
     //TO CHILDREN PROPS
