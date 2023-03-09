@@ -1,10 +1,8 @@
 import axios from "axios";
-import { getEnvVariables } from '../helpers/getEnvVariables';
 
-const { VITE_API_URL } = getEnvVariables();
 
 const tasksApi = axios.create({
-    baseURL: VITE_API_URL,
+    baseURL: import.meta.env.VITE_API_URL,
 });
 
 //TODO: Add interceptors

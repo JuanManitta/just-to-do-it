@@ -1,11 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router';
 import { AuthRoutes } from "../auth/routes/AuthRoutes";
 import { JustTaskItRoutes } from '../ui/routes/JustTaskItRoutes';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
 import { useAuthStore } from '../hooks/useAuthStore';
 import { useEffect } from 'react';
-import { CircularProgress, Grid } from '@mui/material';
 
 export const AppRouter = () => {
 
@@ -16,7 +13,6 @@ export const AppRouter = () => {
   }, []);
 
 
-  
  
 
     //TODO: ADD A LOADING SCREEN

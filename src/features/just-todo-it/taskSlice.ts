@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { createTask } from '../../models/task';
 import { Task } from '../../types/taskType';
-import { getTasksFromLocalStorage, saveTasksToLocalStorage } from '../../utilities/localStorage';
 
 
 
@@ -63,22 +61,6 @@ export const taskSlice = createSlice({
 
              
         },
-
-        completeTask:(state, action) =>{
-            const id = action.payload
-            const updatedTasksList = state.tasks.map( task => {
-                if(task.id === id){
-                    return {
-                        ...task,
-                        done: !task.done
-                    }
-                }
-                return task
-            });
-            state.tasks = updatedTasksList;
-            saveTasksToLocalStorage(state.tasks);
-            return state;
-        }
     }
 });
 
@@ -88,7 +70,6 @@ export const {
     deleteTask, 
     editTask, 
     filterAndSearchTasks, 
-    completeTask, 
     loadingTasks,
     handleSkeletonLoading
     } = taskSlice.actions
